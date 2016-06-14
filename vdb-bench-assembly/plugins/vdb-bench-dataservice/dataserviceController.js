@@ -8,9 +8,9 @@
         .module(pluginName)
         .controller('DataserviceController', DataserviceController);
 
-    DataserviceController.$inject = ['RepoRestService', 'REST_URI', 'SYNTAX', 'FileSaver', 'Blob', '$window'];
+    DataserviceController.$inject = ['RepoRestService', 'REST_URI', 'SYNTAX', 'DownloadService'];
 
-    function DataserviceController(RepoRestService, REST_URI, SYNTAX, FileSaver, Blob, $window) {
+    function DataserviceController(RepoRestService, REST_URI, SYNTAX, DownloadService) {
         var vm = this;
 
         vm.dataservices = [];
@@ -50,7 +50,7 @@
             // Removes any outdated dataservice
             vm.dataservice = null;
         }
-        
+
         // Event handler for clicking the create button
         vm.onCreateDataServiceClicked = function ( dataserviceName, dataserviceDescription ) {
             try {
@@ -120,34 +120,8 @@
          */
         vm.onExportDataServiceClicked = function( dataservice ) {
             vm.dataservice = dataservice;
-            try {
-                RepoRestService.download(vm.dataservice).then(
-                    function (exportStatus) {
-                        if (! exportStatus.downloadable)
-                            return;
 
-                        if (! exportStatus.content)
-                            return;
-
-                        var enc = exportStatus.content;
-                        var content = atob(enc);
-                        var data = new Blob([content], { type: 'text/plain;charset=utf-8' });
-
-                        var name = exportStatus.name;
-                        if (_.isEmpty(name))
-                            name = dataservice.keng__id;
-
-                        var type = exportStatus.type;
-                        if (_.isEmpty(type))
-                            type = 'zip';
-
-                        FileSaver.saveAs(data, name + SYNTAX.DOT + type);
-                    },
-                    function (response) {
-                        throw new RepoRestService.newRestException("Failed to export the artifact ");
-                    });
-            } catch (error) {} finally {
-            }
+            DownloadService.download(dataservice);
         };
                 
         /**
