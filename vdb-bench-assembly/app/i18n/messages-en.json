@@ -41,6 +41,8 @@
         "NotAvailable" : "Not Available",
         "Password" : "Password",
         "PasswordLabel" : "Password:",
+        "Port" : "Port",
+        "PortLabel" : "Port:",
         "Remove" : "Remove",
         "Repository" : "Repository",
         "Save" : "Save",
@@ -707,9 +709,11 @@
         "Administration" : "Administration",
         "adminPasswordPlaceholder" : "Enter the Teiid administration password",
         "adminUserNamePlaceholder" : "Enter the Teiid administration user name",
+        "adminPortPlaceholder" : "Enter the Teiid administration port",
         "jdbcPasswordPlaceholder" : "Enter the Teiid JDBC password",
         "jdbcSecureLabel" : "Is Secure:",
         "jdbcUserNamePlaceholder" : "Enter the Teiid JDBC user name",
+        "jdbcPortPlaceholder" : "Enter the Teiid JDBC port",
         "StatusErrorLabel" : "Status Error:",
         "UpdateBtn" : "Update",
         "TestAdminConnection" : "Test Admin Connection",
@@ -717,8 +721,10 @@
         "help" : {
             "adminPassword" : "The administration password",
             "adminUserName" : "The administration user name",
+            "adminPort" : "The administration communication port",
             "jdbcPassword" : "The JDBC password",
             "jdbcUserName" : "The JDBC user name",
+            "jdbcPort" : "The JDBC communication port",
             "jdbcSecure" : "Determines usage of JDBC secure protocol"
         }
     },

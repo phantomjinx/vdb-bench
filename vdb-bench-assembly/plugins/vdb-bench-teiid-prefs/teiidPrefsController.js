@@ -20,8 +20,10 @@
         vm.teiid = {
             adminUser: 'admin',
             adminPasswd: 'admin',
+            adminPort: 9990,
             jdbcUser: 'user',
             jdbcPasswd: 'user',
+            jdbcPort: 31000,
             jdbcSecure: false,
         };
 
@@ -38,8 +40,10 @@
 
             var same = vm.teiid.adminUser === vm.oldTeiid.adminUser &&
                 vm.teiid.adminPasswd === vm.oldTeiid.adminPasswd &&
+                vm.teiid.adminPort === vm.oldTeiid.adminPort &&
                 vm.teiid.jdbcUser === vm.oldTeiid.jdbcUser &&
                 vm.teiid.jdbcPasswd === vm.oldTeiid.jdbcPasswd &&
+                vm.teiid.jdbcPort === vm.oldTeiid.jdbcPort &&
                 vm.teiid.jdbcSecure === vm.oldTeiid.jdbcSecure;
 
             return !same;
@@ -120,8 +124,10 @@
                     function (teiidStatus) {
                         vm.teiid.adminUser = teiidStatus.tko__adminUser;
                         vm.teiid.adminPasswd = teiidStatus.tko__adminPswd;
+                        vm.teiid.adminPort = teiidStatus.tko__adminPort;
                         vm.teiid.jdbcUser = teiidStatus.tko__jdbcUser;
                         vm.teiid.jdbcPasswd = teiidStatus.tko__jdbcPswd;
+                        vm.teiid.jdbcPort = teiidStatus.tko__jdbcPort;
                         vm.teiid.jdbcSecure = teiidStatus.tko__jdbcSecure;
 
                         vm.oldTeiid = _.clone(vm.teiid);

@@ -55,6 +55,22 @@
                         </div>
                     </div>
 
+                    <div class="control-group row">
+                        <div class="col-sm-2">
+                            <label class="help-label teiid-pref-help">
+                                <span class="fa fa-info-circle" uib-tooltip="{{:: 'teiid-preferences.help.adminPort' | translate}}"
+                                      tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+                            </label>
+                            <label class="control-label pull-right" for="adminPort" translate="shared.PortLabel"></label>
+                        </div>
+                        <div class="controls col-sm-9">
+                            <input type="number" id="teiid-pref-adminPort" class="form-control" ng-model="vm.teiid.adminPort"
+                                placeholder="{{:: 'teiid-preferences.adminPortPlaceholder' | translate}}"
+                                max="65535"
+                                required>
+                        </div>
+                    </div>
+
                     <div class="teiid-pref-test-button row">
                         <div class=col-sm-2></div>
                         <button class="btn btn-default col-sm-2" ng-click="vm.submitCredentials()" ng-disabled="!(vm.needsUpdate()===true)"
@@ -105,6 +121,22 @@
                         <div class="controls col-sm-9">
                             <input type="password" id="teiid-pref-jdbcPasswd" class="form-control" ng-model="vm.teiid.jdbcPasswd"
                                 placeholder="{{:: 'teiid-preferences.jdbcPasswordPlaceholder' | translate}}"
+                                required>
+                        </div>
+                    </div>
+
+                    <div class="control-group row">
+                        <div class="col-sm-2">
+                            <label class="help-label teiid-pref-help">
+                                <span class="fa fa-info-circle" uib-tooltip="{{:: 'teiid-preferences.help.jdbcPort' | translate}}"
+                                      tooltip-class="custom-tooltip" tooltip-append-to-body="true"></span>
+                            </label>
+                            <label class="control-label pull-right" for="jdbcPort" translate="shared.PortLabel"></label>
+                        </div>
+                        <div class="controls col-sm-9">
+                            <input type="number" id="teiid-pref-jdbcPort" class="form-control" ng-model="vm.teiid.jdbcPort"
+                                placeholder="{{:: 'teiid-preferences.jdbcPortPlaceholder' | translate}}"
+                                max="65535"
                                 required>
                         </div>
                     </div>
