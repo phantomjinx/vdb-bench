@@ -59,7 +59,7 @@
                     },
                     function (response) {
                         // Some kind of error has occurred
-                        setError(response.message);
+                        setError(RepoRestService.responseMessage(response));
                     });
             } catch (error) {
                 setError(error.message);
@@ -111,7 +111,7 @@
                     },
                     function (response) {
                         // Some kind of error has occurred
-                        setError(response.message);
+                        setError(RepoRestService.responseMessage(response));
                     });
             } catch (error) {
                 setError(error.message);
@@ -138,7 +138,7 @@
                     },
                     function (response) {
                         // Some kind of error has occurred
-                        setError(response.message);
+                        setError(RepoRestService.responseMessage(response));
                         vm.loading = false;
                     });
             } catch (error) {

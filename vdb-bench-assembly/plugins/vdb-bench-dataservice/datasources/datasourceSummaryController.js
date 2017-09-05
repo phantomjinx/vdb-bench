@@ -9,12 +9,14 @@
         .controller('DatasourceSummaryController', DatasourceSummaryController);
 
     DatasourceSummaryController.$inject = ['$scope', '$rootScope', '$translate', '$interval', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSPageService', 'DSSelectionService',
-                                           'SvcSourceSelectionService', 'TranslatorSelectionService', 'DatasourceWizardService', 
-                                           'ConnectionSelectionService', 'DownloadService', 'CredentialService', 'pfViewUtils'];
+                                           'SvcSourceSelectionService', 'TranslatorSelectionService', 'DatasourceWizardService',
+                                           'ConnectionSelectionService', 'DownloadService', 'CredentialService', 'pfViewUtils',
+                                           'DialogService'];
 
     function DatasourceSummaryController($scope, $rootScope, $translate, $interval, RepoRestService, REST_URI, SYNTAX, DSPageService, DSSelectionService,
-                                          SvcSourceSelectionService, TranslatorSelectionService, DatasourceWizardService, 
-                                          ConnectionSelectionService, DownloadService, CredentialService, pfViewUtils) {
+                                          SvcSourceSelectionService, TranslatorSelectionService, DatasourceWizardService,
+                                          ConnectionSelectionService, DownloadService, CredentialService, pfViewUtils,
+                                          DialogService) {
         var vm = this;
 
         vm.srcLoading = SvcSourceSelectionService.isLoading();
@@ -153,7 +155,8 @@
                         },
                         function (response) {
                             // Some kind of error has occurred
-                            throw RepoRestService.newRestException("Failed to update workspace sources.\n" + response.message);
+                            DialogService.basicInfoMsg(RepoRestService.responseMessage(response),
+                                                        "Failed to update workspace sources");
                         });
                 } catch (error) {
                     alert("An error occurred:\n" + error.message);
@@ -197,7 +200,8 @@
                     },
                     function (response) {
                         // Some kind of error has occurred
-                        throw RepoRestService.newRestException("Failed to get sources for status update.\n" + response.message);
+                        DialogService.basicInfoMsg(RepoRestService.responseMessage(response),
+                                                    "Failed to get sources for status update");
                     });
             } catch (error) {
                 alert("An error occurred:\n" + error.message);
@@ -239,12 +243,14 @@
                     function (response) {
                         resetListAfterDelete(serverUndeploySuccess);
                         var removeLocalSourceFailedMsg = $translate.instant('datasourceSummaryController.removeLocalSourceFailedMsg');
-                        throw RepoRestService.newRestException(removeLocalSourceFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                        DialogService.basicInfoMsg(removeLocalSourceFailedMsg + "\n" + RepoRestService.responseMessage(response),
+                                                    "Error deleting source");
                     });
             } catch (error) {
                 resetListAfterDelete(serverUndeploySuccess);
                 var removeLocalSourceFailedMsg = $translate.instant('datasourceSummaryController.removeLocalSourceFailedMsg');
-                throw RepoRestService.newRestException(removeLocalSourceFailedMsg + "\n" + error);
+                DialogService.basicInfoMsg(removeLocalSourceFailedMsg + "\n" + error,
+                                            "Error deleting source");
             }
         }
 
@@ -261,7 +267,8 @@
                 vm.selectedSourceDDL = "";
             } else {
                 var removeServerDeploymentFailedMsg = $translate.instant('datasourceSummaryController.removeServerDeploymentFailedMsg');
-                throw RepoRestService.newRestException(removeServerDeploymentFailedMsg + "\n" + error);
+                DialogService.basicInfoMsg(removeServerDeploymentFailedMsg + "\n" + error,
+                                            "Error removing deployment");
             }
         };
 

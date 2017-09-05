@@ -106,7 +106,7 @@
                         selectedVdb.previewContent = $filter('prettyXml')(xml);
                     },
                     function (response) {
-                        selectedVdb.previewContent = "Error occurred: " + response.message;
+                        selectedVdb.previewContent = "Error occurred: " + RepoRestService.responseMessage(response);
                     });
             } catch (error) {
                 selectedVdb.previewContent = "Error occurred: " + error.message;

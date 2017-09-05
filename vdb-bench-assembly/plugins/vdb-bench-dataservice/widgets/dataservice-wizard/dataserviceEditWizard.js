@@ -10,7 +10,8 @@
 
     DataserviceEditWizard.$inject = ['CONFIG', 'SYNTAX'];
     DataserviceEditWizardController.$inject = ['$scope', '$rootScope', '$document', '$translate',
-                                               'RepoRestService', 'EditWizardService', 'DSSelectionService', 'SvcSourceSelectionService', 'REST_URI', 'SYNTAX', 'STYLES'];
+                                               'RepoRestService', 'EditWizardService', 'DSSelectionService', 'SvcSourceSelectionService',
+                                               'REST_URI', 'SYNTAX', 'STYLES', 'DialogService'];
 
     function DataserviceEditWizard(config, syntax) {
         var directive = {
@@ -27,7 +28,9 @@
     }
 
     function DataserviceEditWizardController($scope, $rootScope, $document, $translate,
-                                             RepoRestService, EditWizardService, DSSelectionService, SvcSourceSelectionService, REST_URI, SYNTAX, STYLES) {
+                                             RepoRestService, EditWizardService, DSSelectionService,
+                                             SvcSourceSelectionService, REST_URI, SYNTAX, STYLES,
+                                             DialogService) {
         var vm = this;
         vm.stepTitle = $translate.instant('dataserviceEditWizard.stepTitle');
         vm.nextButtonTitle = $translate.instant('shared.Next');
@@ -410,11 +413,13 @@
                     },
                     function (response) {
                         var getModelsFailedMsg = $translate.instant('dataserviceEditWizard.getVdbModelsFailedMsg');
-                        throw RepoRestService.newRestException(getModelsFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                        DialogService.basicInfoMsg(getModelsFailedMsg + "\n" + RepoRestService.responseMessage(response),
+                                                    "Failure to retrieve models");
                     });
             } catch (error) {
                 var getModelsFailedMsg = $translate.instant('dataserviceEditWizard.getVdbModelsFailedMsg');
-                throw RepoRestService.newRestException(getModelsFailedMsg + "\n" + error);
+                DialogService.basicInfoMsg(getModelsFailedMsg + "\n" + error,
+                                            "Failure to retrieve models");
             }
         }
 
@@ -430,11 +435,13 @@
                         },
                         function (response) {
                             var updateVdbFailedMsg = $translate.instant('dataserviceEditWizard.updateVdbFromDdlFailedMsg');
-                            throw RepoRestService.newRestException(updateVdbFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                            DialogService.basicInfoMsg(updateVdbFailedMsg + "\n" + RepoRestService.responseMessage(response),
+                                                        "Failure to update model");
                         });
             } catch (error) {
                 var updateVdbFailedMsg = $translate.instant('dataserviceEditWizard.updateVdbFromDdlFailedMsg');
-                throw RepoRestService.newRestException(updateVdbFailedMsg + "\n" + error);
+                DialogService.basicInfoMsg(updateVdbFailedMsg + "\n" + error,
+                                            "Failure to update model");
             }
         }
 
@@ -453,11 +460,13 @@
                     },
                     function (response) {
                         var getVdbModelsFailedMsg = $translate.instant('dataserviceEditWizard.getVdbModelsFailedMsg');
-                        throw RepoRestService.newRestException(getVdbModelsFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                        DialogService.basicInfoMsg(getVdbModelsFailedMsg + "\n" + RepoRestService.responseMessage(response),
+                                                    "Failure to retrieve models");
                     });
             } catch (error) {
                 var getVdbModelsFailedMsg = $translate.instant('dataserviceEditWizard.getVdbModelsFailedMsg');
-                throw RepoRestService.newRestException(getVdbModelsFailedMsg + "\n" + error);
+                DialogService.basicInfoMsg(getVdbModelsFailedMsg + "\n" + error,
+                                            "Failure to retrieve models");
             }
         	
         }
@@ -489,11 +498,13 @@
                    },
                     function (response) {
                        var getTablesFailedMsg = $translate.instant('dataserviceEditWizard.getVdbModelTablesFailedMsg');
-                       throw RepoRestService.newRestException(getTablesFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                       DialogService.basicInfoMsg(getTablesFailedMsg + "\n" + RepoRestService.responseMessage(response),
+                                                    "Failure to retrieve model tables");
                     });
             } catch (error) {
                 var getTablesFailedMsg = $translate.instant('dataserviceEditWizard.getVdbModelTablesFailedMsg');
-                throw RepoRestService.newRestException(getTablesFailedMsg + "\n" + error);
+                DialogService.basicInfoMsg(getTablesFailedMsg + "\n" + error,
+                                            "Failure to retrieve model tables");
             }
         }
 
@@ -547,11 +558,13 @@
                    },
                     function (response) {
                         var errorMsg = $translate.instant('dataserviceEditWizard.getColumnsFailedMsg');
-                        throw RepoRestService.newRestException(errorMsg + "\n" + RepoRestService.responseMessage(response));
+                        DialogService.basicInfoMsg(errorMsg + "\n" + RepoRestService.responseMessage(response),
+                                                    "Failure to retrieve model table columns");
                     });
             } catch (error) {
                 var errorMsg = $translate.instant('dataserviceEditWizard.getColumnsFailedMsg');
-                throw RepoRestService.newRestException(errorMsg + "\n" + error);
+                DialogService.basicInfoMsg(errorMsg + "\n" + error,
+                                            "Failure to retrieve model table columns");
             }
         }
 
@@ -569,11 +582,13 @@
                     },
                     function (response) {
                         var errorMsg = $translate.instant('dataserviceEditWizard.updateDataserviceFailedMsg');
-                        throw RepoRestService.newRestException(errorMsg + "\n" + RepoRestService.responseMessage(response));
+                        DialogService.basicInfoMsg(errorMsg + "\n" + RepoRestService.responseMessage(response),
+                                                    "Failure to update data service");
                     });
             } catch (error) {
                 var errorMsg = $translate.instant('dataserviceEditWizard.updateDataserviceFailedMsg');
-                throw RepoRestService.newRestException(errorMsg + "\n" + error);
+                DialogService.basicInfoMsg(errorMsg + "\n" + error,
+                                            "Failure to update data service");
             }
         }
 
@@ -591,11 +606,13 @@
                     },
                     function (response) {
                         var errorMsg = $translate.instant('dataserviceEditWizard.createDataserviceFailedMsg');
-                        throw RepoRestService.newRestException(errorMsg + "\n" + RepoRestService.responseMessage(response));
+                        DialogService.basicInfoMsg(errorMsg + "\n" + RepoRestService.responseMessage(response),
+                                                    "Failure to create data service");
                     });
             } catch (error) {
                 var errorMsg = $translate.instant('dataserviceEditWizard.createDataserviceFailedMsg');
-                throw RepoRestService.newRestException(errorMsg + "\n" + error);
+                DialogService.basicInfoMsg(errorMsg + "\n" + error,
+                                            "Failure to create data service");
             }
         }
         
@@ -636,8 +653,9 @@
                             	setDefaultReadOnlyDataRole( dataserviceName, vm.readOnlyAccess, sourceNames[0], null );
                             },
                             function (response) {
-                                throw RepoRestService.newRestException($translate.instant('dsNewController.saveFailedMsg', 
-                                                                                          {response: RepoRestService.responseMessage(response)}));
+                                DialogService.basicInfoMsg($translate.instant('dsNewController.saveFailedMsg',
+                                                            {response: RepoRestService.responseMessage(response)}),
+                                                            "Failure to set dataservice vdb");
                             });
                     } catch (error) {
                     }
@@ -692,8 +710,9 @@
                             	setDefaultReadOnlyDataRole( dataserviceName, vm.readOnlyAccess, sourceNames[0], sourceNames[1] );
                             },
                             function (response) {
-                                throw RepoRestService.newRestException($translate.instant('dsNewController.saveFailedMsg', 
-                                                                                          {response: RepoRestService.responseMessage(response)}));
+                                DialogService.basicInfoMsg($translate.instant('dsNewController.saveFailedMsg',
+                                                            {response: RepoRestService.responseMessage(response)}),
+                                                            "Failure to set service vdb");
                             });
                     } catch (error) {
                     }

@@ -11,9 +11,9 @@
         .module('vdb-bench.core')
         .factory('DriverSelectionService', DriverSelectionService);
 
-    DriverSelectionService.$inject = ['SYNTAX', 'REST_URI', 'RepoRestService', 'DownloadService', '$rootScope'];
+    DriverSelectionService.$inject = ['SYNTAX', 'REST_URI', 'RepoRestService', 'DownloadService', '$rootScope', 'DialogService'];
 
-    function DriverSelectionService(SYNTAX, REST_URI, RepoRestService, DownloadService, $rootScope) {
+    function DriverSelectionService(SYNTAX, REST_URI, RepoRestService, DownloadService, $rootScope, DialogService) {
 
         var drvr = {};
         drvr.loading = true;
@@ -71,7 +71,8 @@
                             function (response) {
                                 // Some kind of error has occurred
                                 drvr.teiidDrivers = [];
-                                throw RepoRestService.newRestException("Failed to load drivers from the host services.\n" + response.message);
+                                DialogService.basicInfoMsg(RepoRestService.responseMessage(response),
+                                                            "Failed to load drivers from teiid");
                             });
                         setLoading(false);
                     },
@@ -79,7 +80,8 @@
                         // Some kind of error has occurred
                         drvr.drivers = [];
                         setLoading(false);
-                        throw RepoRestService.newRestException("Failed to load drivers from the host services.\n" + response.message);
+                        DialogService.basicInfoMsg(RepoRestService.responseMessage(response),
+                                                    "Failed to load drivers from teiid");
                     });
             } catch (error) {
                 drvr.drivers = [];

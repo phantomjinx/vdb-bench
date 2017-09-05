@@ -8,9 +8,9 @@
         .module(pluginName)
         .controller('TranslatorsController', TranslatorsController);
 
-    TranslatorsController.$inject = ['RepoRestService', 'REST_URI'];
+    TranslatorsController.$inject = ['RepoRestService', 'REST_URI', 'DialogService'];
 
-    function TranslatorsController(RepoRestService, REST_URI) {
+    function TranslatorsController(RepoRestService, REST_URI, DialogService) {
         var vm = this;
 
         vm.translators = [];
@@ -35,12 +35,14 @@
                         // Some kind of error has occurred
                         vm.translators = [];
                         vm.init = false;
-                        throw RepoRestService.newRestException("Failed to load translators from the host services.\n" + response.message);
+                        DialogService.basicInfoMsg("Failed to load translators from teiid.\n" + RepoRestService.responseMessage(response),
+                                                    "Failure to retrieve translators");
                     });
             } catch (error) {
                 vm.translators = [];
                 vm.init = false;
-                alert("An exception occurred:\n" + error.message);
+                DialogService.basicInfoMsg("Failed to load translators from teiid.\n" + RepoRestService.responseMessage(error),
+                                            "Failure to retrieve translators");
             }
 
             // Removes any outdated translator

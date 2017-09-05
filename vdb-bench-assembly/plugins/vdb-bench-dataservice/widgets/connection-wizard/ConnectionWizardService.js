@@ -12,10 +12,10 @@
         .factory('ConnectionWizardService', ConnectionWizardService);
 
     ConnectionWizardService.$inject = ['$rootScope', '$translate', 'RepoRestService', 'ConnectionSelectionService',
-                                       'DriverSelectionService', 'SYNTAX', 'CONNECTION_KEYS'];
+                                       'DriverSelectionService', 'SYNTAX', 'CONNECTION_KEYS', 'DialogService'];
 
     function ConnectionWizardService($rootScope, $translate, RepoRestService, ConnectionSelectionService,
-                                     DriverSelectionService, SYNTAX, CONNECTION_KEYS) {
+                                     DriverSelectionService, SYNTAX, CONNECTION_KEYS, DialogService) {
 
         /**
          * Service instance to be returned
@@ -133,12 +133,14 @@
                         $rootScope.$broadcast("ConnectionWizardServiceReady");
                    },
                     function (response) {
-                        throw RepoRestService.newRestException($translate.instant('connectionWizardService.templateGetFailedMsg',
-                                                                                {error: RepoRestService.responseMessage(response)}));
+                        DialogService.basicInfoMsg($translate.instant('connectionWizardService.templateGetFailedMsg',
+                                                    {error: RepoRestService.responseMessage(response)}),
+                                                    "Failure to initialise connection property templates");
                     });
             } catch (error) {
-                throw RepoRestService.newRestException($translate.instant('connectionWizardService.templateGetFailedMsg',
-                                                                        {error: error}));
+                DialogService.basicInfoMsg($translate.instant('connectionWizardService.templateGetFailedMsg',
+                                            {error: error}),
+                                            "Failure to initialise connection property templates");
             }
         };
 
@@ -190,13 +192,15 @@
                         function (response) {
                             var errorMsg = $translate.instant('connectionWizardService.validateConnectionNameError');
                             wiz.validating.name = false;
-                            throw RepoRestService.newRestException(errorMsg + "\n" + RepoRestService.responseMessage(response) );
+                            DialogService.basicInfoMsg(errorMsg + "\n" + RepoRestService.responseMessage(response) ,
+                                                        "Failure validating connection name");
                         }
                     );
                 } catch (error) {
                     var errorMsg = $translate.instant('connectionWizardService.validateConnectionNameError');
                     wiz.validating.name = false;
-                    throw RepoRestService.newRestException(errorMsg + "\n" + error);
+                    DialogService.basicInfoMsg(errorMsg + "\n" + error,
+                                                "Failure validating connection name");
                 }
             }
         }
@@ -278,13 +282,15 @@
                     function (response) {
                         var errorMsg = $translate.instant('connectionWizardService.validateJndiError');
                         wiz.validating.jndi = false;
-                        throw RepoRestService.newRestException(errorMsg + "\n" + RepoRestService.responseMessage(response));
+                        DialogService.basicInfoMsg(errorMsg + "\n" + RepoRestService.responseMessage(response),
+                                                    "Failure validating jndi name");
                     }
                 );
             } catch (error) {
                 var errorMsg = $translate.instant('connectionWizardService.validateJndiError');
                 wiz.validating.jndi = false;
-                throw RepoRestService.newRestException(errorMsg + "\n" + error);
+                DialogService.basicInfoMsg(errorMsg + "\n" + error,
+                                            "Failure validating jndi name");
             }
         }
 
@@ -353,12 +359,14 @@
                     },
                     function (response) {
                         var errorMsg = $translate.instant('connectionWizardService.cannotRetrieveTemplateEntries');
-                        throw RepoRestService.newRestException(errorMsg + "\n" + RepoRestService.responseMessage(response));
+                        DialogService.basicInfoMsg(errorMsg + "\n" + RepoRestService.responseMessage(response),
+                                                    "Failure retrieving connection property templates");
                     }
                 );
             } catch (error) {
                 var errorMsg = $translate.instant('connectionWizardService.cannotRetrieveTemplateEntries');
-                throw RepoRestService.newRestException(errorMsg + "\n" + error);
+                DialogService.basicInfoMsg(errorMsg + "\n" + error,
+                                            "Failure retrieving connection property templates");
             }
         };
 

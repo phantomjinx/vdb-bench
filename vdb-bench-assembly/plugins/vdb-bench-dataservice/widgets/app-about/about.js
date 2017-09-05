@@ -101,7 +101,7 @@
                         setClientTitle(null);
                         setClientVersion(null);
 
-                        vm.client.error = response.message;
+                        vm.client.error = RepoRestService.responseMessage(response);
                         vm.client.loading = false;
                     });
             } catch (error) {
@@ -129,7 +129,7 @@
                         setRepoTitle(null);
                         setRepoVersion(null);
 
-                        vm.repo.error = response.message;
+                        vm.repo.error = RepoRestService.responseMessage(response);
                         vm.repo.loading = false;
                     });
             } catch (error) {

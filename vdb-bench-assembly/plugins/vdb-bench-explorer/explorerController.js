@@ -9,10 +9,10 @@
         .controller('ExplorerController', ExplorerController);
 
     ExplorerController.$inject = ['$uibModal', '$window', 'RepoRestService', 'VdbSelectionService',
-                                                'SYNTAX', 'REST_URI', 'VDB_KEYS', '$scope'];
+                                                'SYNTAX', 'REST_URI', 'VDB_KEYS', '$scope', 'DialogService'];
 
     function ExplorerController($uibModal, $window, RepoRestService, VdbSelectionService,
-                                              SYNTAX, REST_URI, VDB_KEYS, $scope) {
+                                              SYNTAX, REST_URI, VDB_KEYS, $scope, DialogService) {
         var vm = this;
 
         /*
@@ -287,7 +287,8 @@
                     },
                     function (response) {
                         // Some kind of error has occurred
-                        throw new RepoRestService.newRestException("Failed to load searches from the host services.\n" + response.message);
+                        DialogService.basicInfoMsg("Failed to load searches from teiid.\n" + RepoRestService.responseMessage(response),
+                                                    "Failure to load searches");
                     });
             } catch (error) {
                 alert("An exception occurred:\n" + error.message);

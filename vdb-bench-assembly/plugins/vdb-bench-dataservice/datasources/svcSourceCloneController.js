@@ -8,11 +8,13 @@
         .module(pluginName)
         .controller('SvcSourceCloneController', SvcSourceCloneController);
 
-    SvcSourceCloneController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 
-                                        'SvcSourceSelectionService', 'CredentialService', 'DSPageService'];
+    SvcSourceCloneController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService',
+                                        'SvcSourceSelectionService', 'CredentialService', 'DSPageService',
+                                        'DialogService'];
 
-    function SvcSourceCloneController($scope, $rootScope, $translate, RepoRestService, 
-                                      SvcSourceSelectionService, CredentialService, DSPageService) {
+    function SvcSourceCloneController($scope, $rootScope, $translate, RepoRestService,
+                                      SvcSourceSelectionService, CredentialService, DSPageService,
+                                      DialogService) {
         var vm = this;
         vm.cloneVdbInProgress = false;
         vm.sourceName = '';
@@ -53,12 +55,14 @@
                         },
                         function ( response ) {
                             var errorMsg = $translate.instant( 'datasourceWizardService.validateDataSourceNameError' );
-                            throw RepoRestService.newRestException( errorMsg + "\n" + RepoRestService.responseMessage( response ) );
+                            DialogService.basicInfoMsg( errorMsg + "\n" + RepoRestService.responseMessage( response ) ,
+                                                        "Failure validating data source name");
                         }
                     );
                 } catch ( error ) {
                     var errorMsg = $translate.instant( 'datasourceWizardService.validateDataSourceNameError' );
-                    throw RepoRestService.newRestException( errorMsg + "\n" + error );
+                    DialogService.basicInfoMsg( errorMsg + "\n" + error ,
+                                                "Failure validating data source name");
                 }
             }
         };
@@ -92,11 +96,13 @@
                     },
                     function (response) {
                         var copyFailedMsg = $translate.instant('svcSourceCloneController.copyFailedMsg');
-                        throw RepoRestService.newRestException(copyFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                        DialogService.basicInfoMsg(copyFailedMsg + "\n" + RepoRestService.responseMessage(response),
+                                                    "Error clone failure");
                     });
             } catch (error) {
                 var copyFailedMsg = $translate.instant('svcSourceCloneController.copyFailedMsg');
-                throw RepoRestService.newRestException(copyFailedMsg + "\n" + error);
+                DialogService.basicInfoMsg(copyFailedMsg + "\n" + error,
+                                            "Error clone failure");
             }
         };
 
@@ -124,11 +130,13 @@
                     },
                     function (response) {
                         var copyFailedMsg = $translate.instant('svcSourceCloneController.copyFailedMsg');
-                        throw RepoRestService.newRestException(copyFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                        DialogService.basicInfoMsg(copyFailedMsg + "\n" + RepoRestService.responseMessage(response),
+                                                    "Error updating data source owner");
                     });
             } catch (error) {
                 var copyFailedMsg = $translate.instant('svcSourceCloneController.copyFailedMsg');
-                throw RepoRestService.newRestException(copyFailedMsg + "\n" + error);
+                DialogService.basicInfoMsg(copyFailedMsg + "\n" + error,
+                                            "Error updating data source owner");
             }
         }
 
@@ -151,9 +159,10 @@
                         SvcSourceSelectionService.refresh('datasource-summary');
                    },
                     function (response) {
-                        SvcSourceSelectionService.setDeploying(false, vdbName, false, response.message);
+                        SvcSourceSelectionService.setDeploying(false, vdbName, false, RepoRestService.responseMessage(response));
                         var deployFailedMsg = $translate.instant('svcSourceCloneController.deployFailedMsg');
-                        throw RepoRestService.newRestException(deployFailedMsg + "\n" + RepoRestService.responseMessage(response));
+                        DialogService.basicInfoMsg(deployFailedMsg + "\n" + RepoRestService.responseMessage(response),
+                                                    "Failure to deploy");
                     });
             } catch (error) {} finally {
             }

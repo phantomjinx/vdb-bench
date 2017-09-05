@@ -11,11 +11,13 @@
         .module('vdb-bench.core')
         .factory('SvcSourceSelectionService', SvcSourceSelectionService);
 
-    SvcSourceSelectionService.$inject = ['$rootScope', 'SYNTAX', 'REST_URI', 'VDB_KEYS', 
-                                         'RepoRestService', 'CredentialService', 'ConnectionSelectionService', 'TranslatorSelectionService', 'DownloadService'];
+    SvcSourceSelectionService.$inject = ['$rootScope', 'SYNTAX', 'REST_URI', 'VDB_KEYS',
+                                         'RepoRestService', 'CredentialService', 'ConnectionSelectionService',
+                                         'TranslatorSelectionService', 'DownloadService', 'DialogService'];
 
-    function SvcSourceSelectionService($rootScope, SYNTAX, REST_URI, VDB_KEYS, 
-                                        RepoRestService, CredentialService, ConnectionSelectionService, TranslatorSelectionService, DownloadService) {
+    function SvcSourceSelectionService($rootScope, SYNTAX, REST_URI, VDB_KEYS,
+                                        RepoRestService, CredentialService, ConnectionSelectionService,
+                                        TranslatorSelectionService, DownloadService, DialogService) {
 
         var svcSrc = {};
         svcSrc.loading = false;
@@ -76,7 +78,8 @@
                         updateVdbStatusProperties(pageId);
                     },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to sync workspace VDBs with server.\n" + response.message);
+                        DialogService.basicInfoMsg(RepoRestService.responseMessage(response),
+                                                    "Error Synchronising Vdbs from Teiid");
                     });
             } catch (error) {
                 alert("An exception occurred:\n" + error.message);
@@ -105,7 +108,8 @@
                         // Some kind of error has occurred
                         svcSrc.serviceSources = [];
                         setLoading(false);
-                        throw RepoRestService.newRestException("Failed to load workspace vdbs from the host services.\n" + response.message);
+                        DialogService.basicInfoMsg("Failed to initialse data sources from teiid.\n" + RepoRestService.responseMessage(response),
+                                                    "Error initialising data sources");
                     });
             } catch (error) {
                 svcSrc.serviceSources = [];
@@ -127,7 +131,8 @@
                     function (response) {
                         // Some kind of error has occurred
                         svcSrc.serviceSources = [];
-                        throw RepoRestService.newRestException("Failed to load server vdbs from the host services.\n" + response.message);
+                        DialogService.basicInfoMsg("Failure updating sources status from teiid.\n" + RepoRestService.responseMessage(response),
+                                                    "Error updating sources status");
                     });
             } catch (error) {
                 svcSrc.serviceSources = [];

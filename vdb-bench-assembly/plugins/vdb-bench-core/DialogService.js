@@ -24,6 +24,8 @@
     		$uibModalInstance.close();
     		$scope.$destroy();
     	}; // end close
+
+        $scope.isCollapsed = true;
     }
 
     function DialogService(SYNTAX, CONFIG, $uibModal) {
@@ -40,11 +42,29 @@
                 modalTemplate = modalTemplate + '<h3 class="modal-title">' + title + '</h3>';
 
             modalTemplate = modalTemplate + '</div>';
+
+            var detail = null;
+            if (message.includes("-----")) {
+                var components = message.split("-----");
+                message = components[0];
+                detail = components[1];
+            }
+
             modalTemplate = modalTemplate + '<div class="modal-body" style="height: 200px; overflow-y: auto;">';
 
             modalTemplate = modalTemplate + '<div>';
-            modalTemplate = modalTemplate + '<p>' + message + '</p>';
+            modalTemplate = modalTemplate + '<h4 style="padding: 0 1em;">' + message + '</h4>';
             modalTemplate = modalTemplate + "</div>";
+
+            if (detail != null) {
+                modalTemplate = modalTemplate + '<button type="button" class="btn btn-default" ng-click="isCollapsed = !isCollapsed">Details >>></button>';
+                modalTemplate = modalTemplate + '<hr>';
+                modalTemplate = modalTemplate + '<div uib-collapse="isCollapsed">';
+                modalTemplate = modalTemplate + '<div class="well well-lg" style="margin-right: 0.5em;">';
+                modalTemplate = modalTemplate + '<div style="overflow-x: auto;">' + detail + '</div>';
+                modalTemplate = modalTemplate + '</div>';
+                modalTemplate = modalTemplate + '</div>';
+            }
 
             modalTemplate = modalTemplate + '</div>';
             modalTemplate = modalTemplate + '<div class="modal-footer">';

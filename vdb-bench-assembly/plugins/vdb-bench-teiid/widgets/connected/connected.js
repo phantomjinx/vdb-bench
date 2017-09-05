@@ -102,7 +102,7 @@
                         setConnected(false);
                         setAvailable(false);
 
-                        setError(response.message);
+                        setError(RepoRestService.responseMessage(response));
                         vm.loading = false;
                     });
             } catch (error) {

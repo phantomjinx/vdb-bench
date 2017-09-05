@@ -8,10 +8,10 @@
         .module(pluginName)
         .directive('vdbComponentTree', vdbComponentTree);
 
-    vdbComponentTree.$inject = ['CONFIG', 'SYNTAX', 'VDB_KEYS', 'D3V', '$timeout', 'RepoRestService'];
+    vdbComponentTree.$inject = ['CONFIG', 'SYNTAX', 'VDB_KEYS', 'D3V', '$timeout', 'RepoRestService', 'DialogService'];
 
     /* @ngInject */
-    function vdbComponentTree(CONFIG, SYNTAX, VDB_KEYS, D3V, $timeout, RepoRestService) {
+    function vdbComponentTree(CONFIG, SYNTAX, VDB_KEYS, D3V, $timeout, RepoRestService, DialogService) {
 
         var TOP_MARGIN = 50;
         var DEPTH_HEIGHT = 100;
@@ -690,7 +690,8 @@
                             }
                         );
                     } catch (error) {
-                        throw RepoRestService.newRestException("Failed to retrieve the content of the node from the host services.\n" + error.message);
+                        DialogService.basicInfoMsg("Failed to retrieve the content of the node from teiid.\n" + error.message,
+                                                    "Node content retrieval failure");
                     }
                 }
             }
@@ -772,7 +773,8 @@
                             }
                         );
                     } catch (error) {
-                        throw RepoRestService.newRestException("Failed to retrieve the content of the node from the host services.\n" + error.message);
+                        DialogService.basicInfoMsg("Failed to retrieve the content of the node from teiid.\n" + error.message,
+                            "Node content retrieval failure");
                     }
                 }
             }

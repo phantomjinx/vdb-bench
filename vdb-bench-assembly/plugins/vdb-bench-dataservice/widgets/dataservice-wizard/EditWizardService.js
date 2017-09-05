@@ -10,9 +10,9 @@
         .module('vdb-bench.dataservice')
         .factory('EditWizardService', EditWizardService);
 
-    EditWizardService.$inject = ['$rootScope', '$translate', 'RepoRestService', 'JOIN'];
+    EditWizardService.$inject = ['$rootScope', '$translate', 'RepoRestService', 'JOIN', 'DialogService'];
 
-    function EditWizardService($rootScope, $translate, RepoRestService, JOIN) {
+    function EditWizardService($rootScope, $translate, RepoRestService, JOIN, DialogService) {
 
         var wiz = {};
         var DEFAULT_PREDICATE = 
@@ -232,12 +232,14 @@
                         },
                         function ( response ) {
                             var errorMsg = $translate.instant( 'editWizardService.validateDataServiceNameError' );
-                            throw RepoRestService.newRestException( errorMsg + "\n" + RepoRestService.responseMessage( response ) );
+                            DialogService.basicInfoMsg( errorMsg + "\n" + RepoRestService.responseMessage( response ) ,
+                                                        "Failure validating data service name");
                         }
                     );
                 } catch ( error ) {
                     var errorMsg = $translate.instant( 'editWizardService.validateDataServiceNameError' );
-                    throw RepoRestService.newRestException( errorMsg + "\n" + error );
+                    DialogService.basicInfoMsg( errorMsg + "\n" + error ,
+                                                "Failure validating data service name");
                 }
             }
         }
@@ -687,11 +689,13 @@
                         },
                         function (response) {
                             var errMsg = $translate.instant('editWizardService.getJoinCriteriaFailedMsg');
-                            throw RepoRestService.newRestException(errMsg + "\n" + RepoRestService.responseMessage(response));
+                            DialogService.basicInfoMsg(errMsg + "\n" + RepoRestService.responseMessage(response),
+                                                        "Failure retrieving join criteria");
                         });
                 } catch (error) {
                     var errMsg = $translate.instant('editWizardService.getJoinCriteriaFailedMsg');
-                    throw RepoRestService.newRestException(errMsg + "\n" + error);
+                    DialogService.basicInfoMsg(errMsg + "\n" + error,
+                                                "Failure retrieving join criteria");
                 }
             };
 
@@ -773,11 +777,13 @@
                     },
                     function (response) {
                         var errMsg = $translate.instant('editWizardService.initTableSelectionsFailedMsg');
-                        throw RepoRestService.newRestException(errMsg + "\n" + RepoRestService.responseMessage(response));
+                        DialogService.basicInfoMsg(errMsg + "\n" + RepoRestService.responseMessage(response),
+                                                    "Failure retrieving view info");
                     });
             } catch (error) {
                 var errMsg = $translate.instant('editWizardService.initTableSelectionsFailedMsg');
-                throw RepoRestService.newRestException(errMsg + "\n" + error);
+                DialogService.basicInfoMsg(errMsg + "\n" + error,
+                            "Failure retrieving view info");
             }
         }
 
@@ -797,11 +803,13 @@
                    },
                     function (response) {
                         var errorMsg = $translate.instant('dataserviceEditWizard.getColumnsFailedMsg');
-                        throw RepoRestService.newRestException(errorMsg + "\n" + RepoRestService.responseMessage(response));
+                        DialogService.basicInfoMsg(errorMsg + "\n" + RepoRestService.responseMessage(response),
+                                                    "Failure retrieving model table columns");
                     });
             } catch (error) {
                 var errorMsg = $translate.instant('dataserviceEditWizard.getColumnsFailedMsg');
-                throw RepoRestService.newRestException(errorMsg + "\n" + error);
+                DialogService.basicInfoMsg(errorMsg + "\n" + error,
+                                            "Failure retrieving model table columns");
             }
         }
 

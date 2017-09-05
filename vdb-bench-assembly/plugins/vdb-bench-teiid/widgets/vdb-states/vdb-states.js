@@ -139,7 +139,7 @@
                     },
                     function (response) {
                         // Some kind of error has occurred
-                        setError(response.message);
+                        setError(RepoRestService.responseMessage(response));
                         vm.vdbs = [];
                         vm.loading = false;
                     });

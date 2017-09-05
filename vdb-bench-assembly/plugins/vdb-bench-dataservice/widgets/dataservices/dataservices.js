@@ -81,7 +81,7 @@
                         setTotal(0);
                         setNames(null);
 
-                        setError(response.message);
+                        setError(RepoRestService.responseMessage(response));
                         vm.loading = false;
                     });
             } catch (error) {

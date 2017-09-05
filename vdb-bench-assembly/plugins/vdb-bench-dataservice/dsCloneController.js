@@ -8,9 +8,11 @@
         .module(pluginName)
         .controller('DSCloneController', DSCloneController);
 
-    DSCloneController.$inject = ['$translate', 'RepoRestService', 'DSSelectionService', 'DSPageService'];
+    DSCloneController.$inject = ['$translate', 'RepoRestService', 'DSSelectionService',
+                                 'DSPageService', 'DialogService'];
 
-    function DSCloneController($translate, RepoRestService, DSSelectionService, DSPageService) {
+    function DSCloneController($translate, RepoRestService, DSSelectionService,
+                               DSPageService, DialogService) {
         var vm = this;
         vm.serviceName = '';
         vm.nameErrorMsg = '';
@@ -44,12 +46,14 @@
                         },
                         function ( response ) {
                             var errorMsg = $translate.instant( 'editWizardService.validateDataServiceNameError' );
-                            throw RepoRestService.newRestException( errorMsg + "\n" + RepoRestService.responseMessage( response ) );
+                            DialogService.basicInfoMsg( errorMsg + "\n" + RepoRestService.responseMessage( response ) ,
+                                                        "Failure to validate service name");
                         }
                     );
                 } catch ( error ) {
                     var errorMsg = $translate.instant( 'editWizardService.validateDataServiceNameError' );
-                    throw RepoRestService.newRestException( errorMsg + "\n" + error );
+                    DialogService.basicInfoMsg( errorMsg + "\n" + error ,
+                                                "Failure to validate service name");
                 }
             }
         };
@@ -65,10 +69,14 @@
                         DSSelectionService.refresh('dataservice-summary');
                     },
                     function (response) {
-                	   throw RepoRestService.newRestException($translate.instant('dsCloneController.cloneFailedMsg', 
-                                                                                 {response: RepoRestService.responseMessage(response)}));
+                	   DialogService.basicInfoMsg($translate.instant('dsCloneController.cloneFailedMsg',
+                                                    {response: RepoRestService.responseMessage(response)}),
+                                                    "Failure to clone data service");
                     });
-            } catch (error) {} finally {
+            } catch (error) {
+                DialogService.basicInfoMsg($translate.instant('dsCloneController.cloneFailedMsg',
+                                             {response: RepoRestService.responseMessage(error)}),
+                                             "Failure to clone data service");
             }
         };
 

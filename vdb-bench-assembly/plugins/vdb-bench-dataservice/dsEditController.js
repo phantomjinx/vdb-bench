@@ -8,11 +8,13 @@
         .module(pluginName)
         .controller('DSEditController', DSEditController);
 
-    DSEditController.$inject = ['$scope', '$document', '$translate', '$timeout', 'SYNTAX', 'RepoRestService', 
-                                'EditWizardService', 'SvcSourceSelectionService', 'DSSelectionService', 'DSPageService'];
+    DSEditController.$inject = ['$scope', '$document', '$translate', '$timeout', 'SYNTAX', 'RepoRestService',
+                                'EditWizardService', 'SvcSourceSelectionService', 'DSSelectionService', 'DSPageService',
+                                'DialogService'];
 
-    function DSEditController($scope, $document, $translate, $timeout, SYNTAX, 
-                              RepoRestService, EditWizardService, SvcSourceSelectionService, DSSelectionService, DSPageService) {
+    function DSEditController($scope, $document, $translate, $timeout, SYNTAX,
+                              RepoRestService, EditWizardService, SvcSourceSelectionService, DSSelectionService, DSPageService,
+                              DialogService) {
         var vm = this;
         var DEFAULT_VIEW = "CREATE VIEW ServiceView ( ) AS SELECT * FROM aTable;";
         vm.viewDdl = "";
@@ -171,8 +173,9 @@
                                 function (response) {
                                     vm.viewDdl = DEFAULT_VIEW;
                                     vm.refreshViewDdl = !vm.refreshViewDdl;
-                                     throw RepoRestService.newRestException($translate.instant('dsNewController.saveFailedMsg', 
-                                                                                             {response: RepoRestService.responseMessage(response)}));
+                                    DialogService.basicInfoMsg($translate.instant('dsNewController.saveFailedMsg',
+                                                                {response: RepoRestService.responseMessage(response)}),
+                                                                "Failure to retrieve ddl");
                                 });
                         } catch (error) {
                             vm.viewDdl = DEFAULT_VIEW;
@@ -234,8 +237,9 @@
                                 function (response) {
                                     vm.viewDdl = DEFAULT_VIEW;
                                     vm.refreshViewDdl = !vm.refreshViewDdl;
-                                    throw RepoRestService.newRestException($translate.instant('dsNewController.saveFailedMsg', 
-                                                                                              {response: RepoRestService.responseMessage(response)}));
+                                    DialogService.basicInfoMsg($translate.instant('dsNewController.saveFailedMsg',
+                                                                {response: RepoRestService.responseMessage(response)}),
+                                                                "Failure to retrieve ddl");
                                 });
                         } catch (error) {
                             vm.viewDdl = DEFAULT_VIEW;
@@ -326,11 +330,13 @@
                     },
                     function (response) {
                         var errorMsg = $translate.instant('dsEditController.updateDataserviceFailedMsg');
-                        throw RepoRestService.newRestException(errorMsg + "\n" + RepoRestService.responseMessage(response));
+                        DialogService.basicInfoMsg(errorMsg + "\n" + RepoRestService.responseMessage(response),
+                                                    "Failure to update service");
                     });
             } catch (error) {
                 var errorMsg = $translate.instant('dsEditController.updateDataserviceFailedMsg');
-                throw RepoRestService.newRestException(errorMsg + "\n" + error);
+                DialogService.basicInfoMsg(errorMsg + "\n" + error,
+                                            "Failure to update service");
             }
         };
 

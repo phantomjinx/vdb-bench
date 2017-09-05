@@ -8,10 +8,13 @@
         .module(pluginName)
         .controller('DSNewController', DSNewController);
 
-    DSNewController.$inject = ['$scope', '$translate', 'SYNTAX', 'RepoRestService', 
-                               'EditWizardService', 'DSSelectionService', 'SvcSourceSelectionService'];
+    DSNewController.$inject = ['$scope', '$translate', 'SYNTAX', 'RepoRestService',
+                               'EditWizardService', 'DSSelectionService', 'SvcSourceSelectionService',
+                               'DialogService'];
 
-    function DSNewController($scope, $translate, SYNTAX, RepoRestService, EditWizardService, DSSelectionService, SvcSourceSelectionService) {
+    function DSNewController($scope, $translate, SYNTAX, RepoRestService,
+                             EditWizardService, DSSelectionService, SvcSourceSelectionService,
+                             DialogService) {
         var vm = this;
         
         vm.hasSources = SvcSourceSelectionService.getServiceSources().length>0;
@@ -127,8 +130,9 @@
                             function (response) {
                                 vm.viewDdl = DEFAULT_VIEW;
                                 vm.refreshViewDdl = !vm.refreshViewDdl;
-                                 throw RepoRestService.newRestException($translate.instant('dsNewController.saveFailedMsg', 
-                                                                                         {response: RepoRestService.responseMessage(response)}));
+                                DialogService.basicInfoMsg($translate.instant('dsNewController.saveFailedMsg',
+                                                            {response: RepoRestService.responseMessage(response)}),
+                                                            "Failure to retrieve ddl");
                             });
                     } catch (error) {
                         vm.viewDdl = DEFAULT_VIEW;
@@ -184,8 +188,9 @@
                             function (response) {
                                 vm.viewDdl = DEFAULT_VIEW;
                                 vm.refreshViewDdl = !vm.refreshViewDdl;
-                                throw RepoRestService.newRestException($translate.instant('dsNewController.saveFailedMsg', 
-                                                                                          {response: RepoRestService.responseMessage(response)}));
+                                DialogService.basicInfoMsg($translate.instant('dsNewController.saveFailedMsg',
+                                                            {response: RepoRestService.responseMessage(response)}),
+                                                            "Failure to retrieve ddl");
                             });
                     } catch (error) {
                         vm.viewDdl = DEFAULT_VIEW;
@@ -274,11 +279,13 @@
                     },
                     function (response) {
                         var errorMsg = $translate.instant('dsNewController.createDataserviceFailedMsg');
-                        throw RepoRestService.newRestException(errorMsg + "\n" + RepoRestService.responseMessage(response));
+                        DialogService.basicInfoMsg(errorMsg + "\n" + RepoRestService.responseMessage(response),
+                                                    "Failure to create data service");
                     });
             } catch (error) {
                 var errorMsg = $translate.instant('dsNewController.createDataserviceFailedMsg');
-                throw RepoRestService.newRestException(errorMsg + "\n" + error);
+                DialogService.basicInfoMsg(errorMsg + "\n" + error,
+                                            "Failure to create data service");
             }
         };
 

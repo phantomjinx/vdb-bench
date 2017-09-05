@@ -10,11 +10,11 @@
 
     ConnectionCloneController.$inject = ['$scope', '$rootScope', '$translate', '$timeout', 'RepoRestService',
                                         'ConnectionSelectionService', 'CredentialService', 'DSPageService',
-                                        'CONNECTION_KEYS'];
+                                        'CONNECTION_KEYS', 'DialogService'];
 
     function ConnectionCloneController($scope, $rootScope, $translate, $timeout, RepoRestService,
                                         ConnectionSelectionService, CredentialService, DSPageService,
-                                        CONNECTION_KEYS) {
+                                        CONNECTION_KEYS, DialogService) {
         var vm = this;
         vm.cloneConnInProgress = false;
         vm.cloneOperationFinished = false;
@@ -50,12 +50,14 @@
                         },
                         function ( response ) {
                             var errorMsg = $translate.instant( 'connectionWizardService.validateConnectionNameError' );
-                            throw RepoRestService.newRestException( errorMsg + "\n" + RepoRestService.responseMessage( response ) );
+                            DialogService.basicInfoMsg( errorMsg + "\n" + RepoRestService.responseMessage( response ) ,
+                                                        "Error validating connection name");
                         }
                     );
                 } catch ( error ) {
                     var errorMsg = $translate.instant( 'connectionWizardService.validateConnectionNameError' );
-                    throw RepoRestService.newRestException( errorMsg + "\n" + error );
+                    DialogService.basicInfoMsg( errorMsg + "\n" + error ,
+                                                "Error validating connection name");
                 }
             }
         };

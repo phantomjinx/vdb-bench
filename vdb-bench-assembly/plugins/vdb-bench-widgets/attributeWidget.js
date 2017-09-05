@@ -24,9 +24,10 @@
     }
 
     AttributeController.$inject = ['$scope', 'SYNTAX', 'VDB_SCHEMA', 'VDB_KEYS', 'HAWTIO_FORM',
-                                            'RepoRestService', 'SchemaRegistry'];
+                                            'RepoRestService', 'SchemaRegistry', 'DialogService'];
 
-    function AttributeController($scope, SYNTAX, VDB_SCHEMA, VDB_KEYS, HAWTIO_FORM, RepoRestService, SchemaRegistry) {
+    function AttributeController($scope, SYNTAX, VDB_SCHEMA, VDB_KEYS, HAWTIO_FORM,
+                                 RepoRestService, SchemaRegistry, DialogService) {
         var vm = this;
 
         $scope.$watch('vm.component', function (current, original) {
@@ -226,7 +227,8 @@
                             alert("Connection saved");
                         },
                         function (response) {
-                            throw RepoRestService.newRestException("Failed to update the connection. \n" + response.message);
+                            DialogService.basicInfoMsg("Failed to update the connection. \n" + RepoRestService.responseMessage(response),
+                                                        "Connectio update failure");
                         });
                 } catch (error) {} finally {
                 }

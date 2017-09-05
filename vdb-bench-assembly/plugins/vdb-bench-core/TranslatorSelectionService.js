@@ -11,9 +11,9 @@
         .module('vdb-bench.core')
         .factory('TranslatorSelectionService', TranslatorSelectionService);
 
-    TranslatorSelectionService.$inject = ['SYNTAX', 'REST_URI', 'RepoRestService', '$rootScope'];
+    TranslatorSelectionService.$inject = ['SYNTAX', 'REST_URI', 'RepoRestService', '$rootScope', 'DialogService'];
 
-    function TranslatorSelectionService(SYNTAX, REST_URI, RepoRestService, $rootScope) {
+    function TranslatorSelectionService(SYNTAX, REST_URI, RepoRestService, $rootScope, DialogService) {
 
         var tran = {};
         tran.loading = false;
@@ -126,12 +126,14 @@
                         // Some kind of error has occurred
                         tran.translators = [];
                         setLoading(false);
-                        throw RepoRestService.newRestException("Failed to load translators from the host services.\n" + response.message);
+                        DialogService.basicInfoMsg(RepoRestService.responseMessage(response),
+                                                    "Error Loading Translators");
                     });
             } catch (error) {
                 tran.translators = [];
                 setLoading(false);
-                alert("An exception occurred:\n" + error.message);
+                DialogService.basicInfoMsg(RepoRestService.responseMessage(error),
+                                            "Error Loading Translators");
             }
 
             // reset selected translator if desired

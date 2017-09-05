@@ -10,8 +10,8 @@
 
     VdbList.$inject = ['CONFIG', 'SYNTAX'];
     VdbListController.$inject = ['VdbSelectionService', 'RepoRestService',
-                                                'REST_URI', 'SYNTAX', 'VDB_KEYS',
-                                                'DownloadService', '$scope'];
+                                 'REST_URI', 'SYNTAX', 'VDB_KEYS',
+                                 'DownloadService', '$scope', 'DialogService'];
 
     function VdbList(config, syntax) {
         var directive = {
@@ -33,8 +33,8 @@
     }
 
     function VdbListController(VdbSelectionService, RepoRestService,
-                                            REST_URI, SYNTAX, VDB_KEYS,
-                                            DownloadService, $scope) {
+                               REST_URI, SYNTAX, VDB_KEYS,
+                               DownloadService, $scope, DialogService) {
         var vm = this;
 
         vm.vdbs = [];
@@ -65,12 +65,14 @@
                         // Some kind of error has occurred
                         vm.vdbs = [];
                         vm.init = false;
-                        throw RepoRestService.newRestException("Failed to load vdbs from the host services.\n" + response.message);
+                        DialogService.basicInfoMsg("Failed to load vdbs from teiid.\n" + RepoRestService.responseMessage(response),
+                                                    "Vdb retrieval failure");
                     });
             } catch (error) {
                 vm.vdbs = [];
                 vm.init = false;
-                alert("An exception occurred:\n" + error.message);
+                DialogService.basicInfoMsg("Failed to load vdbs from teiid.\n" + RepoRestService.responseMessage(error),
+                                            "Vdb retrieval failure");
             }
 
             // Removes any outdated vdb
@@ -127,7 +129,8 @@
                         initVdbs();
                     },
                     function (response) {
-                        throw new RepoRestService.newRestException("Failed to remove the vdb " + selected[VDB_KEYS.ID] + "from the host services.\n" + response.message);
+                        DialogService.basicInfoMsg("Failed to remove the vdb " + selected[VDB_KEYS.ID] + "from teiid.\n" + RepoRestService.responseMessage(response),
+                                                    "Vdb removal failure");
                     });
             } catch (error) {} finally {
                 // Essential to stop the accordion closing

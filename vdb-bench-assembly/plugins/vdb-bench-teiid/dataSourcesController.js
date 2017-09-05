@@ -8,9 +8,9 @@
         .module(pluginName)
         .controller('DataSourcesController', DataSourcesController);
 
-    DataSourcesController.$inject = ['RepoRestService', 'REST_URI'];
+    DataSourcesController.$inject = ['RepoRestService', 'REST_URI', 'DialogService'];
 
-    function DataSourcesController(RepoRestService, REST_URI) {
+    function DataSourcesController(RepoRestService, REST_URI, DialogService) {
         var vm = this;
 
         vm.datasources = [];
@@ -35,12 +35,14 @@
                         // Some kind of error has occurred
                         vm.datasources = [];
                         vm.init = false;
-                        throw RepoRestService.newRestException("Failed to load data sources from the host services.\n" + response.message);
+                        DialogService.basicInfoMsg("Failed to initialse connections from teiid.\n" + RepoRestService.responseMessage(response),
+                                                    "Failure to retrieve connections");
                     });
             } catch (error) {
                 vm.datasources = [];
                 vm.init = false;
-                alert("An exception occurred:\n" + error.message);
+                DialogService.basicInfoMsg("Failed to initialse connections from teiid.\n" + RepoRestService.responseMessage(error),
+                                            "Failure to retrieve connections");
             }
 
             // Removes any outdated datasource

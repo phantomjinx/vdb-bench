@@ -12,10 +12,10 @@
         .factory('ConnectionSelectionService', ConnectionSelectionService);
 
     ConnectionSelectionService.$inject = ['SYNTAX', 'REST_URI', 'CONNECTION_KEYS', 'RepoRestService', 'DownloadService',
-                                          '$rootScope', 'CredentialService', 'TranslatorSelectionService'];
+                                          '$rootScope', 'CredentialService', 'TranslatorSelectionService', 'DialogService'];
 
     function ConnectionSelectionService(SYNTAX, REST_URI, CONNECTION_KEYS, RepoRestService, DownloadService,
-                                        $rootScope, CredentialService, TranslatorSelectionService) {
+                                        $rootScope, CredentialService, TranslatorSelectionService, DialogService) {
 
         var conn = {};
         conn.loading = false;
@@ -69,7 +69,8 @@
                         // Some kind of error has occurred
                         conn.connections = [];
                         setLoading(false);
-                        throw RepoRestService.newRestException("Failed to load connections from the host services.\n" + response.message);
+                        DialogService.basicInfoMsg("Failed to load connections from teiid.\n" + RepoRestService.responseMessage(response),
+                                                    "Error Initialising Connections");
                     });
             } catch (error) {
                 conn.connections = [];
@@ -96,7 +97,8 @@
                         initWkspConnections(resetSelection);
                     },
                     function (response) {
-                        throw RepoRestService.newRestException("Failed to sync workspace connections with server.\n" + response.message);
+                        DialogService.basicInfoMsg(RepoRestService.responseMessage(response),
+                                                    "Error Syncing Connections from Teiid");
                     });
             } catch (error) {
                 alert("An exception occurred:\n" + error.message);

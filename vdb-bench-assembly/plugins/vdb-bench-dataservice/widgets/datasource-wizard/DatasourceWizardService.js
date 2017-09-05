@@ -11,9 +11,11 @@
         .module('vdb-bench.dataservice')
         .factory('DatasourceWizardService', DatasourceWizardService);
 
-    DatasourceWizardService.$inject = ['$rootScope', '$translate', 'RepoRestService', 'SvcSourceSelectionService', 'TranslatorSelectionService', 'ConnectionSelectionService'];
+    DatasourceWizardService.$inject = ['$rootScope', '$translate', 'RepoRestService', 'SvcSourceSelectionService',
+                                       'TranslatorSelectionService', 'ConnectionSelectionService', 'DialogService'];
 
-    function DatasourceWizardService($rootScope, $translate, RepoRestService, SvcSourceSelectionService, TranslatorSelectionService, ConnectionSelectionService) {
+    function DatasourceWizardService($rootScope, $translate, RepoRestService, SvcSourceSelectionService,
+                                     TranslatorSelectionService, ConnectionSelectionService, DialogService) {
 
         var wiz = {};
 
@@ -275,12 +277,14 @@
                         },
                         function ( response ) {
                             var errorMsg = $translate.instant( 'datasourceWizardService.validateDataSourceNameError' );
-                            throw RepoRestService.newRestException( errorMsg + "\n" + RepoRestService.responseMessage( response ) );
+                            DialogService.basicInfoMsg( errorMsg + "\n" + RepoRestService.responseMessage( response ) ,
+                                                        "Failure validating data source name");
                         }
                     );
                 } catch ( error ) {
                     var errorMsg = $translate.instant( 'datasourceWizardService.validateDataSourceNameError' );
-                    throw RepoRestService.newRestException( errorMsg + "\n" + error );
+                    DialogService.basicInfoMsg( errorMsg + "\n" + error ,
+                                                "Failure validating data source name");
                 }
             }
         }

@@ -11,9 +11,9 @@
         .module('vdb-bench.core')
         .factory('DSSelectionService', DSSelectionService);
 
-    DSSelectionService.$inject = ['SYNTAX', 'RepoRestService', 'DownloadService', '$rootScope'];
+    DSSelectionService.$inject = ['SYNTAX', 'RepoRestService', 'DownloadService', '$rootScope', 'DialogService'];
 
-    function DSSelectionService(SYNTAX, RepoRestService, DownloadService, $rootScope) {
+    function DSSelectionService(SYNTAX, RepoRestService, DownloadService, $rootScope, DialogService) {
 
         var ds = {};
         ds.loading = false;
@@ -60,7 +60,8 @@
                         ds.dataservices = [];
                         ds.dataservice = null;
                         setLoading(false);
-                        throw RepoRestService.newRestException("Failed to load data services from the host services.\n" + response.message);
+                        DialogService.basicInfoMsg(RepoRestService.responseMessage(response),
+                                                    "Failed to load data services from teiid");
                     });
             } catch (error) {
                 ds.dataservices = [];
@@ -283,8 +284,9 @@
                    },
                     function (response) {
                         service.setDeploying(false, selDSName, false, RepoRestService.responseMessage(response));
-                        throw RepoRestService.newRestException($translate.instant('DSSelectionService.deployFailedMsg', 
-                                                                                  {response: RepoRestService.responseMessage(response)}));
+                        var msg = $translate.instant('DSSelectionService.deployFailedMsg',
+                                                                                  {response: RepoRestService.responseMessage(response)});
+                        DialogService.basicInfoMsg(msg, "Failed to deploy data service");
                     });
             } catch (error) {
                 service.setDeploying(false);

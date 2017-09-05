@@ -9,10 +9,12 @@
         .controller('DSSummaryController', DSSummaryController);
 
     DSSummaryController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 'DSPageService', 'ImportExportService',
-                                   'EditWizardService', 'DSSelectionService', 'SvcSourceSelectionService', 'DownloadService', 'pfViewUtils'];
+                                   'EditWizardService', 'DSSelectionService', 'SvcSourceSelectionService', 'DownloadService', 'pfViewUtils',
+                                   'DialogService'];
 
     function DSSummaryController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, DSPageService, ImportExportService,
-                                 EditWizardService, DSSelectionService, SvcSourceSelectionService, DownloadService, pfViewUtils) {
+                                 EditWizardService, DSSelectionService, SvcSourceSelectionService, DownloadService, pfViewUtils,
+                                 DialogService) {
         var vm = this;
 
         vm.dsLoading = DSSelectionService.isLoading();
@@ -239,12 +241,14 @@
                         }
                     },
                     function (response) {
-                        throw RepoRestService.newRestException($translate.instant('dsSummaryController.deleteFailedMsg', 
-                                                                                  {response: RepoRestService.responseMessage(response)}));
+                        DialogService.basicInfoMsg($translate.instant('dsSummaryController.deleteFailedMsg',
+                                                    {response: RepoRestService.responseMessage(response)}),
+                                                    "Failure to delete data service");
                     });
             } catch (error) {
-                throw RepoRestService.newRestException($translate.instant('dsSummaryController.deleteFailedMsg', 
-                        {response: error.message}));
+                DialogService.basicInfoMsg($translate.instant('dsSummaryController.deleteFailedMsg',
+                                            {response: error.message}),
+                                            "Failure to delete data service");
             }
 
             // Disable the actions until next selection
@@ -293,12 +297,14 @@
                         }
                     },
                     function (response) {
-                        throw RepoRestService.newRestException($translate.instant('dsSummaryController.deployFailedMsg', 
-                                                                                  {response: RepoRestService.responseMessage(response)}));
+                        DialogService.basicInfoMsg($translate.instant('dsSummaryController.deployFailedMsg',
+                                                    {response: RepoRestService.responseMessage(response)}),
+                                                    "Failure to retrieve deployable status");
                     });
             } catch (error) {
-                throw RepoRestService.newRestException($translate.instant('dsSummaryController.deployFailedMsg', 
-                        {response: error.message}));
+                DialogService.basicInfoMsg($translate.instant('dsSummaryController.deployFailedMsg',
+                                            {response: error.message}),
+                                            "Failure to retrieve deployable status");
             }
         };
         

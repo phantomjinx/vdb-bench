@@ -13,10 +13,10 @@
         .factory('DownloadService', DownloadService);
 
     DownloadService.$inject = ['SYNTAX', 'REST_URI', 'VDB_SCHEMA', 'VDB_KEYS',
-                                              'RepoRestService', 'FileSaver', 'Blob', '$base64'];
+                               'RepoRestService', 'FileSaver', 'Blob', '$base64', 'DialogService'];
 
     function DownloadService(SYNTAX, REST_URI, VDB_SCHEMA, VDB_KEYS,
-                                            RepoRestService, FileSaver, Blob, $base64) {
+                             RepoRestService, FileSaver, Blob, $base64, DialogService) {
 
         /*
          * Service instance to be returned
@@ -84,11 +84,15 @@
             try {
                 RepoRestService.download(dwnldableObj).then(
                     function (exportStatus) {
-                        if (! exportStatus.downloadable)
-                            throw new RepoRestService.newRestException("Artifact is not downloadable ");
+                        if (! exportStatus.downloadable) {
+                            DialogService.basicInfoMsg("Artifact is not downloadable", "Not downloadable");
+                            return;
+                        }
 
-                        if (! exportStatus.content)
-                            throw new RepoRestService.newRestException("Artifact content is empty ");
+                        if (! exportStatus.content) {
+                            DialogService.basicInfoMsg("Artifact content is empty", "No content");
+                            return;
+                        }
 
                         var name = exportStatus.name || dwnldableObj.keng__id;
                         var fileType = exportStatus.type || 'data';
@@ -102,7 +106,7 @@
                         FileSaver.saveAs(dataBlob, name + fileExt);
                     },
                     function (response) {
-                        throw new RepoRestService.newRestException("Failed to export the artifact ");
+                        DialogService.basicInfoMsg("Failed to export the artifact", "Export failure");
                     });
             } catch (error) {} finally {
             }            

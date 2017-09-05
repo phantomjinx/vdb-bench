@@ -110,7 +110,7 @@
                     },
                     function (response) {
                         // Some kind of error has occurred
-                        setJdbcResult(response.message);
+                        setJdbcResult(RepoRestService.responseMessage(response));
                         vm.sql.refreshEditor = true;  // Refresh SQL Editor
                     });
             } catch (error) {

@@ -9,8 +9,8 @@
         .directive('modelTableList', ModelTableList);
 
     ModelTableList.$inject = ['CONFIG', 'SYNTAX'];
-    ModelTableListController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX', 
-                                        'SvcSourceSelectionService', 'TableSelectionService', 'pfViewUtils'];
+    ModelTableListController.$inject = ['$scope', '$rootScope', '$translate', 'RepoRestService', 'REST_URI', 'SYNTAX',
+                                        'SvcSourceSelectionService', 'TableSelectionService', 'pfViewUtils', 'DialogService'];
 
     function ModelTableList(config, syntax) {
         var directive = {
@@ -29,8 +29,8 @@
         return directive;
     }
 
-    function ModelTableListController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX, 
-                                      SvcSourceSelectionService, TableSelectionService, pfViewUtils) {
+    function ModelTableListController($scope, $rootScope, $translate, RepoRestService, REST_URI, SYNTAX,
+                                      SvcSourceSelectionService, TableSelectionService, pfViewUtils, DialogService) {
         var vm = this;
 
         vm.tablesLoading = false;
@@ -65,9 +65,14 @@
                             vm.tablesLoading = false;
                         	var msg = $translate.instant('modelTableList.getTablesErrorMsg', 
                                                          {errorMsg: RepoRestService.responseMessage(response)});
-                            throw RepoRestService.newRestException(msg);
+                            DialogService.basicInfoMsg(msg,
+                                "Failure to retrieve model tables");
                         });
-                } catch (error) {} finally {
+                } catch (error) {
+                    var msg = $translate.instant('modelTableList.getTablesErrorMsg',
+                                                 {errorMsg: RepoRestService.responseMessage(error)});
+                    DialogService.basicInfoMsg(msg,
+                        "Failure to retrieve model tables");
                 }
             };
 
